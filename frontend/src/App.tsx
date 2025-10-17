@@ -5,6 +5,7 @@ import { Blog } from './Pages/Blog'
 import { Blogs } from './Pages/Blogs'
 import { CreateBlog } from './Pages/CreateBlog'
 import { Home } from './Pages/Home'
+import { ProtectedRoute } from './Components/ProtectedRoute'
 
 function App() {
 
@@ -12,12 +13,30 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Public Routes */}
           <Route path='/' element={<Home/>}/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route path='/blogs' element={<Blogs/>}/>
-          <Route path='/blog/new' element={<CreateBlog/>}/>
+          
+          {/* Protected Routes */}
+          <Route path="/blog/:id" element={
+            <ProtectedRoute>
+              <Blog />
+            </ProtectedRoute>
+          } />
+          <Route path='/blogs' element={
+            <ProtectedRoute>
+              <Blogs/>
+            </ProtectedRoute>
+          }/>
+          <Route path='/blog/new' element={
+            <ProtectedRoute>
+              <CreateBlog/>
+            </ProtectedRoute>
+          }/>
+          
+          {/* Catch all route - redirect to home */}
+          <Route path="*" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </>

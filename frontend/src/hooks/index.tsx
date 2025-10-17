@@ -3,6 +3,9 @@ import { useEffect, useState } from "react";
 import { Api } from "../config";
 import { useNavigate } from "react-router-dom";
 
+// Export the auth protection hook
+export { useAuthProtection } from './useAuthProtection';
+
 export interface Blog {
   id: string;
   title: string;

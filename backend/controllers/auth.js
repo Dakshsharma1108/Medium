@@ -72,6 +72,53 @@ const Signin = async (req, res) => {
   }
 };
 
-module.exports = { Signin, Signup };
+const Me = async (req, res) => {
+  try {
+    const userid = req.auth.userid;
+    const user = await Prisma.user.findUnique({
+      where: { id: userid },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+      }
+    });
+
+    if (!user) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "User not found" 
+      });
+    }
+
+    res.json({
+      success: true,
+      user: user
+    });
+
+  } catch (error) {
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({ 
+        success: false, 
+        message: "Invalid token" 
+      });
+    }
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ 
+        success: false, 
+        message: "Token expired" 
+      });
+    }
+    
+    console.error("Auth verification error:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Internal server error" 
+    });
+  }
+};
+
+module.exports = { Signin, Signup, Me };
 
 
