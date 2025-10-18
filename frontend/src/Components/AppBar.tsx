@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate} from "react-router-dom";
 import { Avatar } from "./BlogCard";
 
 interface AppBarProps {
@@ -7,6 +7,7 @@ interface AppBarProps {
 }
 
 export const AppBar = ({ Createblog }: AppBarProps) => {
+  const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -107,6 +108,8 @@ export const AppBar = ({ Createblog }: AppBarProps) => {
                   onClick={() => {
                     setMenuOpen(false);
                     console.log("Logout clicked");
+                    localStorage.removeItem('token');
+                    navigate('/signin')
                   }}
                 >
                   🚪 Sign out

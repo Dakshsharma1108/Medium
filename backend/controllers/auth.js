@@ -10,7 +10,7 @@ dotenv.config();
 const Prisma = new PrismaClient();
 
 function ExistingUser(email) {
-  return Prisma.user.findUnique({
+  return Prisma.user.findFirst({
     where: { email },
   });
 }
@@ -74,7 +74,7 @@ const Signin = async (req, res) => {
 
 const Me = async (req, res) => {
   try {
-    const userid = req.auth.userid;
+    const userid = req.auth.userId;
     const user = await Prisma.user.findUnique({
       where: { id: userid },
       select: {
@@ -114,7 +114,7 @@ const Me = async (req, res) => {
     console.error("Auth verification error:", error);
     res.status(500).json({ 
       success: false, 
-      message: "Internal server error" 
+      message: `Internal server error ${err}`
     });
   }
 };
