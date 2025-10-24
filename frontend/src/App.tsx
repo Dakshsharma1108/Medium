@@ -4,8 +4,8 @@ import { Signin } from './Pages/Signin'
 import { Blog } from './Pages/Blog'
 import { Blogs } from './Pages/Blogs'
 import { CreateBlog } from './Pages/CreateBlog'
-import { Home } from './Pages/Home'
 import { ProtectedRoute } from './Components/ProtectedRoute'
+import { SmartHomeRoute } from './Components/SmartHomeRoute'
 
 function App() {
 
@@ -13,8 +13,10 @@ function App() {
     <>
       <BrowserRouter>
         <Routes>
+          {/* Smart Home Route - redirects to /blogs if authenticated */}
+          <Route path='/' element={<SmartHomeRoute />} />
+          
           {/* Public Routes */}
-          <Route path='/' element={<Home/>}/>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           
@@ -35,8 +37,8 @@ function App() {
             </ProtectedRoute>
           }/>
           
-          {/* Catch all route - redirect to home */}
-          <Route path="*" element={<Home />} />
+          {/* Catch all route - redirect to smart home */}
+          <Route path="*" element={<SmartHomeRoute />} />
         </Routes>
       </BrowserRouter>
     </>
