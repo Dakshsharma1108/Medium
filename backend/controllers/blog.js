@@ -80,6 +80,7 @@ const GetBlog = async (req, res) => {
                 id: true,
                 title: true,
                 content: true,
+                createdAt: true,
                 author: {
                     select: {
                         name: true

@@ -1,13 +1,40 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Avatar } from "./BlogCard";
+import axios from "axios";
+import { Api } from "../config";
+import { useAlert } from "./Alerts";
 
 interface AppBarProps {
   Createblog?: boolean;
   home?: boolean;
 }
 
+interface UserData {
+  id: string;
+  name: string;
+  email: string;
+}
+
 export const AppBar = ({ Createblog, home }: AppBarProps) => {
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const { showError, showSuccess } = useAlert();
+  
+  useEffect(() => {
+     axios.get(`${Api}/auth/me`,{
+      headers:{
+        Authorization: localStorage.getItem('token')
+      }
+    }).then(response =>{
+      console.log(response.data);
+      if (response.data.success && response.data.user) {
+        setUserData(response.data.user);
+      }
+    }).catch(error => {
+      console.error('Failed to fetch user data:', error);
+      showError('Failed to load user details', 'Login again');
+    })
+  }, [showError]);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -80,13 +107,13 @@ export const AppBar = ({ Createblog, home }: AppBarProps) => {
             </Link>
           )}
 
-          {/* Avatar */}
+            {/* Avatar */}
           <div className="relative" ref={menuRef}>
             { !home && (<div
               className="cursor-pointer hover:scale-105 transition-transform"
               onClick={() => setMenuOpen((prev) => !prev)}
             >
-              <Avatar name="Daksh" size="big" />
+              <Avatar name={userData?.name || "User"} size="big" />
             </div>)}
             {home && ( <div className="flex justify-center gap-4 w-full items-center">
              { !isMobile &&<button> <Link to={'/signin'} className=""> Signin</Link></button>}
@@ -98,8 +125,8 @@ export const AppBar = ({ Createblog, home }: AppBarProps) => {
             {menuOpen && (
               <div className="absolute right-0 mt-3 w-56 bg-white shadow-xl border rounded-xl overflow-hidden animate-fadeIn z-50">
                 <div className="px-4 py-3 border-b">
-                  <div className="font-semibold text-gray-800">Dakshsharma</div>
-                  <div className="text-sm text-gray-500">View profile</div>
+                  <div className="font-semibold text-gray-800">{userData?.name || 'Anonymous'}</div>
+                  <div className="text-sm text-gray-500">{userData?.email || 'View profile'}</div>
                 </div>
 
                 {/* Write option — only for mobile and not on CreateBlog */}
@@ -112,20 +139,13 @@ export const AppBar = ({ Createblog, home }: AppBarProps) => {
                     ✏️ Write
                   </Link>
                 )}
-
-                <Link
-                  to="/settings"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  ⚙️ Settings
-                </Link>
                 <button
                   className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition"
                   onClick={() => {
                     setMenuOpen(false);
                     console.log("Logout clicked");
                     localStorage.removeItem("token");
+                    showSuccess("You've been logged out successfully", "Logged Out");
                     navigate("/signin");
                   }}
                 >

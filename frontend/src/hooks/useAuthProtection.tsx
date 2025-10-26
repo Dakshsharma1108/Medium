@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Api } from '../config';
+import { useAlert } from '../Components/Alerts';
 
 interface User {
   id: string;
@@ -24,6 +25,7 @@ export const useAuthProtection = () => {
   
   const navigate = useNavigate();
   const location = useLocation();
+  const { showError, showInfo } = useAlert();
 
   // Check if user is authenticated on component mount
   useEffect(() => {
@@ -69,6 +71,7 @@ export const useAuthProtection = () => {
       }
     } catch (error) {
       console.error('Auth check failed:', error);
+      showError('Session expired. Please login again.', 'Session Expired');
       // Remove invalid token
       localStorage.removeItem('token');
       setAuthState({
@@ -96,6 +99,7 @@ export const useAuthProtection = () => {
       user: null,
       loading: false,
     });
+    showInfo('You have been logged out successfully.', 'Logged Out');
     navigate('/signin');
   };
 

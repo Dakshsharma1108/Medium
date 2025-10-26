@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Api } from "../config";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../Components/Alerts";
 
 // Export the auth protection hook
 export { useAuthProtection } from './useAuthProtection';
@@ -103,6 +104,8 @@ export function useAuth(type: "Signup" | "Signin") {
   });
 
   const navigate = useNavigate();
+  const { showSuccess, showError } = useAlert();
+  
   async function sendRequest() {
     setLoading(true);
     try {
@@ -112,11 +115,14 @@ export function useAuth(type: "Signup" | "Signin") {
       const jwt = response.data.jwt;
       localStorage.setItem("token", jwt);
 
-      alert(response.data.message);
+      showSuccess(response.data.message, type === "Signup" ? "Account Created!" : "Welcome Back!");
       navigate("/blogs");
     } catch (error: any) {
       console.error(error);
-      alert(error?.response?.data?.message || "Authentication failed");
+      showError(
+        error?.response?.data?.message || "Authentication failed",
+        type === "Signup" ? "Signup Failed" : "Login Failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -137,6 +143,7 @@ export function useCreateBlog() {
     content: "",
   });
   const navigate = useNavigate();
+  const { showSuccess, showError } = useAlert();
 
   async function sendRequest() {
     setLoading(true);
@@ -147,11 +154,14 @@ export function useCreateBlog() {
           Authorization: localStorage.getItem("token"),
         },
       });
-      alert(response.data.message);
+      showSuccess(response.data.message, "Blog Published!");
       navigate("/blogs");
     } catch (error: any) {
       console.error(error);
-      alert(error?.response?.data?.message || "Something went wrong");
+      showError(
+        error?.response?.data?.message || "Something went wrong",
+        "Publication Failed"
+      );
     } finally {
       setLoading(false);
     }

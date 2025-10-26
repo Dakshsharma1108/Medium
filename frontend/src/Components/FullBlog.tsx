@@ -5,6 +5,27 @@ import { Avatar } from "./BlogCard"
 
 
 export const FullBlog = ({blog}:{blog:Blog}) => {
+  // Format date as "2nd December 2023"
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    const year = date.getFullYear();
+    
+    // Add ordinal suffix to day
+    const getOrdinalSuffix = (day: number) => {
+      if (day > 3 && day < 21) return 'th';
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    };
+    
+    return `${day}${getOrdinalSuffix(day)} ${month} ${year}`;
+  };
+
   return (
    <div>
         <AppBar />
@@ -15,7 +36,7 @@ export const FullBlog = ({blog}:{blog:Blog}) => {
                         {blog.title}
                     </div>
                     <div className="text-slate-500 pt-2">
-                        Post on 2nd December 2023
+                        Published on {formatDate(blog.createdAt)}
                     </div>
                     <div className="pt-4">
                         {blog.content}

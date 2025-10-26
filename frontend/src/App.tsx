@@ -6,13 +6,15 @@ import { Blogs } from './Pages/Blogs'
 import { CreateBlog } from './Pages/CreateBlog'
 import { ProtectedRoute } from './Components/ProtectedRoute'
 import { SmartHomeRoute } from './Components/SmartHomeRoute'
+import { AlertProvider } from './Components/Alerts'
 
 function App() {
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
+      <AlertProvider>
+        <BrowserRouter>
+          <Routes>
           {/* Smart Home Route - redirects to /blogs if authenticated */}
           <Route path='/' element={<SmartHomeRoute />} />
           
@@ -41,6 +43,7 @@ function App() {
           <Route path="*" element={<SmartHomeRoute />} />
         </Routes>
       </BrowserRouter>
+      </AlertProvider>
     </>
   )
 }
