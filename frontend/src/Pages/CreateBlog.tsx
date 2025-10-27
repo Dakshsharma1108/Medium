@@ -49,7 +49,7 @@ export const CreateBlog = () => {
           />
         </div>
 
-        <div className="flex justify-center mr-72 pt-4">
+        <div className="flex justify-center lg:mr-72 mr-60 pt-4">
           <button
             type="submit"
             className="text-white border border-gray-800 bg-gray-900 focus:outline-none focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-gray-600 text-white dark:hover:bg-gray-600 dark:focus:ring-gray-800"

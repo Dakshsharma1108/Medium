@@ -87,7 +87,7 @@ export function Auth({ type }: { type: "Signup" | "Signin" }) {
           <div className=" flex justify-center mt-6">
             <button
               type="submit"
-              className="text-white bg-gray-800 w-sm  hover:bg-gray-900 focus:outline-none  focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+              className="text-white bg-gray-800 w-85 lg:w-sm  hover:bg-gray-900 focus:outline-none  focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
             >
               {type == "Signin" ? "Sign in" : "Sign Up"}
             </button>
@@ -128,7 +128,7 @@ export function LaballedInput({
           minLength={type== "password"? 6:undefined}
           className={`bg-gray-50 ${
             size == "large" ? "p-8" : ""
-          } text-left border border-gray-300  text-sm rounded-lg  block w-sm mt-3  p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black`}
+          } text-left border border-gray-300  text-sm rounded-lg  block w-86 lg:w-sm mt-3  p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-black`}
           placeholder={Placeholder}
           required
         />
@@ -141,7 +141,7 @@ export function LaballedTextarea({ Placeholder, onChangeTextArea }: Inputs) {
   return (
     <textarea
       onChange={onChangeTextArea}
-      className={`block p-2.5 w-sm text-sm h-32 text-gray-900 bg-gray-50 rounded-lg border border-gray-300  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black`}
+      className={`block p-2.5 lg:w-sm w-86 text-sm h-32 text-gray-900 bg-gray-50 rounded-lg border border-gray-300  dark:border-gray-600 dark:placeholder-gray-400 dark:text-black`}
       placeholder={Placeholder}
       required
     ></textarea>

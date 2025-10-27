@@ -32,7 +32,6 @@ export const AppBar = ({ Createblog, home }: AppBarProps) => {
       }
     }).catch(error => {
       console.error('Failed to fetch user data:', error);
-      showError('Failed to load user details', 'Login again');
     })
   }, [showError]);
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { Api } from '../config';
@@ -26,13 +26,9 @@ export const useAuthProtection = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { showError, showInfo } = useAlert();
+  const hasCheckedInitialAuth = useRef(false);
 
-  // Check if user is authenticated on component mount
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = async () => {
+  const checkAuthStatus = useCallback(async () => {
     const token = localStorage.getItem('token');
     
     if (!token) {
@@ -71,7 +67,12 @@ export const useAuthProtection = () => {
       }
     } catch (error) {
       console.error('Auth check failed:', error);
-      showError('Session expired. Please login again.', 'Session Expired');
+      
+      // Only show error alert if this isn't the initial check
+      if (hasCheckedInitialAuth.current) {
+        showError('Session expired. Please login again.', 'Session Expired');
+      }
+      
       // Remove invalid token
       localStorage.removeItem('token');
       setAuthState({
@@ -81,7 +82,15 @@ export const useAuthProtection = () => {
       });
       return false;
     }
-  };
+  }, []); // Empty dependency array since we don't want it to change
+
+  // Check if user is authenticated on component mount
+  useEffect(() => {
+    if (!hasCheckedInitialAuth.current) {
+      hasCheckedInitialAuth.current = true;
+      checkAuthStatus();
+    }
+  }, []); // Empty dependency array to run only once on mount
 
   const login = (token: string, user: User) => {
     localStorage.setItem('token', token);
