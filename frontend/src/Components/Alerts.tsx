@@ -100,7 +100,15 @@ export const Alert: React.FC<AlertProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div className={`fixed top-4 right-4 z-50 max-w-md w-full transform transition-all duration-300 ease-in-out ${isVisible ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0'}`}>
+    <div className={`fixed top-4 z-50 transition-all duration-300 ease-in-out ${
+      isVisible ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'
+    } ${
+      // Large screens: positioned right
+      'lg:right-4 lg:left-auto lg:transform-none lg:w-96'
+    } ${
+      // Small screens: centered
+      'left-1/2 transform -translate-x-1/2 w-[calc(100%-2rem)] max-w-md'
+    }`}>
       <div className={`border rounded-lg p-4 shadow-lg ${getAlertStyles()}`}>
         <div className="flex items-start">
           <div className={`flex-shrink-0 ${getIconColor()}`}>
